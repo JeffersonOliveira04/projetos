@@ -1,0 +1,29 @@
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title>Lista de Livros</title>
+    </head>
+    <body>
+        <h1>Lista de Livros</h1>
+        <hr>
+        <table border="cv4">
+            <tr>
+                <td>ID</td>
+                <td>Nome</td>
+                <td>Escritor</td>
+                <td>Excluir</td>
+                <td>Atualizar</td>
+            </tr>
+            {% for livro in Livros %}
+            <tr>
+                <td>{{ livro._id }}</td>
+                <td>{{ livro.nome }}</td>
+                <td>{{ livro.escritor }}</td>
+                <td><a href="/exluir/{{ nome._id }}">x</a></td>
+                <td><a href="/atualizar{{ nome._id }}">Atualizar</a></td>
+            </tr>
+            {% endfor %}
+        </table>
+        <a href="index">Voltar</a>
+    </body>
+</html>
