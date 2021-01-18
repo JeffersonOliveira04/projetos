@@ -3,14 +3,14 @@ from flask_sqlalchemy import SQLAlchemy
 
 app = Flask(__name__)
 
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///db.sqlite'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///./db.sqlite'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 db = SQLAlchemy(app)
 
 class Livros(db.Model):
 
-    __tablename__= 'livros'
+    __tablename__= 'livraria'
 
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     nome = db.Column(db.String)
@@ -38,43 +38,43 @@ def cadastro():
         escritor = request.form.get("escritor") 
 
         if nome and escritor:
-            l = Livro (nome, escritor)
+            l = Livros(nome, escritor)
             db.session.add(l)
             db.session.commit()
 
-    return redirect(url_for("index"))
+    return redirect(url_for("lista"))
 
 @app.route("/lista")
 def lista():
     livros = Livros.query.all()
-    return render_template("lista.html", livros=Livros)
+    return render_template("lista.html", livros=livros)
 
-@app.route("/excluir/<int:id>")
+@app.route("/excluir/<int:id>", methods=['GET'])
 def excluir(id):
-    nome = nome.query.filter_by(_id=id).first()
+    livro = Livros.query.filter_by(id=id).first()
 
-    db.session.delete(nome)
-    db.sessionc.commit()
+    db.session.delete(livro)
+    db.session.commit()
 
-    nome = Nome.query.all()
-    #return render_template("lista.html" nome=nome)
+    livros = Livros.query.all()
+    return render_template("lista.html", livros=livros)
 
 @app.route("/atualizar/<int:id>", methods=['GET', 'POST'])
 def atualizar(id):
-    nome = Nome.query.filter_by(_id=id).first()
+    livros = Livros.query.filter_by(id=id).first()
     
     if request.method == "POST":
         nome = request.form.get("nome")
         escritor = request.form.get("escritor")   
 
         if nome and escritor:
-            nome.nome = nome
-            nome.escritor = escritor
+            livros.nome = nome
+            livros.escritor = escritor
             
             db.session.commit()
             
             return redirect(url_for("lista"))
-    return render_template("/atualizar.html", nome=nome)
+    return render_template("/atualizar.html", livros=livros)
 
 
 
